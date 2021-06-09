@@ -8,8 +8,10 @@ pytest = "*"
 pytest-cov = "*"
 black = "*"
 ipdb = "*"
+pytest-flask = "*"
 
 [packages]
+Flask = "*"
 
 [pipenv]
 allow_prereleases = true
