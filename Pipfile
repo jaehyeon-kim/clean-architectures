@@ -10,6 +10,7 @@ black = "*"
 ipdb = "*"
 
 [packages]
+Flask = "*"
 
 [pipenv]
 allow_prereleases = true
