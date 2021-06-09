@@ -8,6 +8,7 @@ pytest = "*"
 pytest-cov = "*"
 black = "*"
 ipdb = "*"
+pytest-flask = "*"
 
 [packages]
 Flask = "*"
