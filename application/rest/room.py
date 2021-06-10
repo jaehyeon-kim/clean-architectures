@@ -1,10 +1,12 @@
 import json
 
-from flask import Blueprint, Response, blueprints
+from flask import Blueprint, Response, request
 
 from rentomatic.repository.memrepo import MemRepo
 from rentomatic.use_cases.room_list import room_list_use_case
 from rentomatic.serializers.room import RoomJsonEncoder
+from rentomatic.requests.room_list import build_room_list_request
+from rentomatic.responses import ResponseTypes
 
 blueprint = Blueprint("room", __name__)
 
@@ -42,9 +44,17 @@ rooms = [
 
 @blueprint.route("/rooms", methods=["GET"])
 def room_list():
+    qrystr_params = {"filters": {}}
+
+    for arg, values in request.args.items():
+        if arg.startswith("filter_"):
+            qrystr_params["filters"][arg.replace("filter_", "")] = values
+
+    request_object = build_room_list_request(filters=qrystr_params["filters"])
+
     repo = MemRepo(rooms)
-    result = room_list_use_case(repo)
+    result = room_list_use_case(repo, request_object)
 
     return Response(
-        json.dumps(result, cls=RoomJsonEncoder), mimetype="application/json", status=200
+        json.dumps(result.value, cls=RoomJsonEncoder), mimetype="application/json", status=200
     )
